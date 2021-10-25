@@ -70,10 +70,11 @@ int main(int argc, char **argv) {
             unsigned int workGroupSize = 128;
             unsigned int global_work_size = (n + workGroupSize - 1) / workGroupSize * workGroupSize;
             for (unsigned int i = 2; i <= global_work_size; i *= 2) {
-                for (unsigned int j = i / 2; j > workGroupSize; j /= 2) {
+                unsigned int j = i / 2;
+                for (; j >= workGroupSize; j /= 2) {
                     bitonic.exec(gpu::WorkSize(workGroupSize, global_work_size), as_gpu, n, i, j);
                 }
-                local_bitonic.exec(gpu::WorkSize(workGroupSize, global_work_size), as_gpu, n, i, workGroupSize);
+                local_bitonic.exec(gpu::WorkSize(workGroupSize, global_work_size), as_gpu, n, i, j);
             }
             t.nextLap();
         }
