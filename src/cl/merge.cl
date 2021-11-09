@@ -23,9 +23,8 @@ __kernel void merge(__global const float* as, __global float* out,
         uint mid = (l + r) / 2;
         if (as[mid] < el) {
             l = mid + 1;
-        } else if (as[mid] == el) {
-            l = mid + (id >= right_b);
-            break;
+        } else if (as[mid] == el && id >= right_b) {
+            l = mid + 1;
         } else {
             r = mid;
         } 
